@@ -1,0 +1,12 @@
+services:
+  tests-java:
+    build:
+      context: .
+      dockerfile: Dockerfile.java
+    init: true
+    shm_size: "1gb"
+    user: "${TEST_UID:-1000}:${TEST_GID:-1000}"
+    environment:
+      BASE_URL: ${BASE_URL:-https://rcsi-science.github.io/demo-roomly/}
+    volumes:
+      - ./artifacts-java:/work/artifacts-java

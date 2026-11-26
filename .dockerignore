@@ -1,0 +1,10 @@
+.git
+.venv
+node_modules
+__pycache__
+.pytest_cache
+artifacts
+artifacts-ts
+artifacts-java
+java/target
+*.zip
