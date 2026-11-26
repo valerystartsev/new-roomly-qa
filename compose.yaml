@@ -1,9 +1,24 @@
 services:
+  site:
+    image: python:3.14-alpine
+    working_dir: /site
+    volumes:
+      - ./:/site:ro
+    command: ["python", "-m", "http.server", "8000", "--bind", "0.0.0.0"]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/')"]
+      interval: 2s
+      timeout: 3s
+      retries: 15
+
   tests:
     build: .
+    depends_on:
+      site:
+        condition: service_healthy
     init: true
     shm_size: "1gb"
     environment:
-      BASE_URL: ${BASE_URL:-https://rcsi-science.github.io/demo-roomly/}
+      BASE_URL: ${BASE_URL:-http://site:8000/}
     volumes:
       - ./artifacts:/work/artifacts

@@ -8,7 +8,7 @@ export default defineConfig({
     ['junit', { outputFile: 'artifacts-ts/junit.xml' }],
   ],
   use: {
-    baseURL: process.env.BASE_URL || 'https://rcsi-science.github.io/demo-roomly/',
+    baseURL: process.env.BASE_URL || 'http://localhost:8000/',
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
   },

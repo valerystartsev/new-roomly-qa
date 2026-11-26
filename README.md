@@ -1,6 +1,6 @@
 # Тестовое задание для QA Engineer
 
-Тестируемая страница: <https://rcsi-science.github.io/demo-roomly/>
+Тестируемая страница находится в файле `index.html` этого репозитория.
 
 Каркас для автоматизации находится в корне репозитория.
 
@@ -30,12 +30,12 @@
 docker compose run --build --rm tests
 ```
 
-Команда соберёт тестовый образ, установит зависимости и запустит smoke-тест вместе с тестами кандидата. Результаты сохраняются в каталоге `artifacts/`:
+Команда запустит локальный сайт в отдельном контейнере, соберёт тестовый образ и выполнит smoke-тест вместе с тестами кандидата. Результаты сохраняются в каталоге `artifacts/`:
 
 - `artifacts/junit.xml` — отчёт о выполнении;
 - `artifacts/browser/` — скриншоты и trace при падении тестов.
 
-Если Docker недоступен, зависимости можно установить вручную:
+Если Docker недоступен, запустите `python -m http.server 8000` в отдельном терминале из корня репозитория, затем установите зависимости и запустите тесты:
 
 ```bash
 python -m pip install -r requirements.txt
@@ -79,7 +79,7 @@ Run the TypeScript suite in its own container:
 docker compose -f compose.typescript.yaml run --build --rm tests-ts
 ```
 
-The default target is the published page. Set `BASE_URL` to test another address reachable from the container. The JUnit report and browser artifacts are written to `artifacts-ts/`, separate from Python reports.
+Docker Compose starts the local site in a separate container. Set `BASE_URL` to test another address reachable from the test container. The JUnit report and browser artifacts are written to `artifacts-ts/`, separate from Python reports.
 
 The container runs as UID and GID 1000 by default so it can write reports for a typical Linux user. If your IDs differ, pass them as `TEST_UID=$(id -u) TEST_GID=$(id -g)` before the Docker Compose command.
 
@@ -92,7 +92,7 @@ npm run test:ts
 npm run typecheck
 ```
 
-For example, run `python -m http.server 8000` in another terminal and set `BASE_URL=http://localhost:8000/` when running the tests locally. `localhost` inside a Docker container refers to the container itself.
+For local runs, start `python -m http.server 8000` in another terminal from the repository root; the tests default to `http://localhost:8000/`. `localhost` inside a Docker container refers to the container itself.
 
 ## Java Playwright suite
 
@@ -104,9 +104,9 @@ Run it in a separate container:
 docker compose -f compose.java.yaml run --build --rm tests-java
 ```
 
-The target defaults to the published page; set `BASE_URL` to use another address reachable from the container. Maven's JUnit XML and text reports are written to `artifacts-java/`. The container uses UID and GID 1000 by default; if needed, set `TEST_UID=$(id -u) TEST_GID=$(id -g)` before the command.
+Docker Compose starts the local site in a separate container; set `BASE_URL` to use another address reachable from the test container. Maven's JUnit XML and text reports are written to `artifacts-java/`. The container uses UID and GID 1000 by default; if needed, set `TEST_UID=$(id -u) TEST_GID=$(id -g)` before the command.
 
-For a local run with Java 21 and Maven, install the matching Chromium once, then run the suite:
+For a local run with Java 21 and Maven, start `python -m http.server 8000` in another terminal from the repository root, install the matching Chromium once, then run the suite:
 
 ```bash
 mvn -f java/pom.xml test-compile exec:java -Dexec.mainClass=com.microsoft.playwright.CLI -Dexec.args="install chromium" -Dexec.classpathScope=test

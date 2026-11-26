@@ -44,7 +44,7 @@ class BookingTest {
     private void openBookingPage() {
         String baseUrl = System.getenv("BASE_URL");
         if (baseUrl == null || baseUrl.isBlank()) {
-            baseUrl = "https://rcsi-science.github.io/demo-roomly/";
+            baseUrl = "http://localhost:8000/";
         }
         Response response = page.navigate(baseUrl,
             new Page.NavigateOptions().setWaitUntil(WaitUntilState.DOMCONTENTLOADED));
