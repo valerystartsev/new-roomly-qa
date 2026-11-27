@@ -2,7 +2,7 @@
 
 Roomly is a client-server meeting room booking application in development. It uses a FastAPI backend and PostgreSQL, with a browser interface for account management.
 
-The current implementation provides local user accounts, administrator and user roles, password management, and initial office, room, and equipment data. The database also contains a preliminary booking and equipment repair schema. **Booking, availability, equipment repair, and office administration are not yet implemented in the API or application interface.**
+The current implementation provides local user accounts, administrator and user roles, password management, and office, room, and equipment administration. The database also contains a preliminary booking and equipment repair schema. **Booking, availability, and equipment repair are not yet implemented in the API or application interface.**
 
 The original static booking form and its QA tests are retained as a separate legacy exercise; they do not create or persist bookings in the application.
 

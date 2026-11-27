@@ -15,6 +15,7 @@ from sqlalchemy.orm import Session as DbSession
 from app.database import SessionLocal
 from app.models import Session, User
 from app.security import digest_token, hash_password, verify_password
+from app.resources import create_resource_router
 
 app = FastAPI(title='Roomly API', version='0.1.0')
 COOKIE_SECURE = os.getenv('COOKIE_SECURE', 'true').lower() == 'true'
@@ -170,4 +171,5 @@ def reset_password(user_id: int, data: ResetPassword, actor=Depends(admin), db: 
     return {'ok': True}
 
 
+app.include_router(create_resource_router(db_session, authenticated, admin))
 app.mount('/account', StaticFiles(directory='app/static', html=True), name='account')
