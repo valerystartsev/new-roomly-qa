@@ -115,6 +115,8 @@ mvn -f java/pom.xml test
 
 ## Roomly application: initial development setup
 
+See the [database structure](docs/database.md) and [API documentation](docs/api.md) for the current implementation (in Russian), and the [GitHub Flow guide](docs/github-flow.md) for the development workflow.
+
 The client-server application is under development. The existing static QA exercise and its test commands remain separate. The first increment provides PostgreSQL reference data and account management; room booking is not implemented yet.
 
 Create a local environment file from `.env.example`, replace all placeholder values with unique local credentials, and keep the file out of version control. Use a URL-safe PostgreSQL password. Start the application with:
@@ -134,4 +136,4 @@ docker compose -p roomly-test -f compose.app.yaml --env-file .env.test exec app 
 
 For the browser test, start the application with test credentials, export `APP_URL`, `INITIAL_ADMIN_EMAIL` and `INITIAL_ADMIN_PASSWORD`, and run `python -m pytest -q browser_tests -o addopts=`, using the existing Playwright environment.
 
-The login rate limit is process-local and intended only for development. A shared rate limiter and a reverse proxy configured for HTTPS are required before production deployment. The initial migration currently covers accounts and reference data; booking and equipment repair schemas arrive with their features.
+The login rate limit is process-local and intended only for development. A shared rate limiter and a reverse proxy configured for HTTPS are required before production deployment. The database includes an initial booking and repair schema; booking and repair APIs and their business workflows are not implemented yet.
