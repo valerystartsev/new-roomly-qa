@@ -22,3 +22,7 @@ Use pytest with the synchronous Playwright API and prefer user-visible role or l
 ## Commits & Pull Requests
 
 History contains only an initial commit, so no established commit convention can be inferred. Use concise, descriptive commit subjects. In pull requests, explain the change, summarize test results, link relevant issues, and include screenshots for visible changes when useful. For QA submissions, include the checklist, defect reports, assumptions, risks, environment details, and execution results described in `README.md`.
+
+## GitHub Flow
+
+Use `main` as the integration branch. Start each focused change from an up-to-date `main` in a descriptive, short-lived branch and propose it through a pull request. Include relevant tests and document their results. Do not push directly to `main` during normal work. Follow the user's approval requirements for commits, pushes, merges, and branch deletion. See `docs/github-flow.md` for the workflow and current CI limitations.

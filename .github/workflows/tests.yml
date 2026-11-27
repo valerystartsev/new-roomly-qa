@@ -24,3 +24,60 @@ jobs:
           path: artifacts/
           if-no-files-found: warn
           retention-days: 7
+
+  application:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_DB: roomly_test
+          POSTGRES_USER: roomly_test
+          POSTGRES_PASSWORD: test-only-password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U roomly_test -d roomly_test"
+          --health-interval 3s
+          --health-timeout 3s
+          --health-retries 20
+    env:
+      DATABASE_URL: postgresql+psycopg://roomly_test:test-only-password@localhost:5432/roomly_test
+      INITIAL_ADMIN_EMAIL: admin@example.test
+      INITIAL_ADMIN_PASSWORD: test-only-password-123
+      COOKIE_SECURE: 'false'
+      APP_URL: http://localhost:8001
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+      - name: Install API and browser test dependencies
+        run: |
+          python -m pip install -r app/requirements.txt
+          python -m pip install -r requirements.txt
+          python -m playwright install --with-deps chromium
+      - name: Migrate and initialize database
+        run: |
+          alembic upgrade head
+          python -m app.seed
+      - name: Run API and database tests
+        run: python -m pytest -q app_tests -o addopts=
+      - name: Run account browser tests
+        run: |
+          uvicorn app.main:app --host 127.0.0.1 --port 8001 > /tmp/roomly-api.log 2>&1 &
+          python - <<'PY'
+          import time
+          import urllib.request
+
+          for attempt in range(30):
+              try:
+                  urllib.request.urlopen('http://127.0.0.1:8001/api/v1/health', timeout=1)
+                  break
+              except OSError:
+                  if attempt == 29:
+                      raise
+                  time.sleep(1)
+          PY
+          python -m pytest -q browser_tests -o addopts=
