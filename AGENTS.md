@@ -17,6 +17,8 @@ Follow the surrounding code: four-space indentation and `snake_case` for Python,
 
 ## Testing Guidelines
 
+Update `docs/application-tests.md` in the same change whenever tests in `app_tests/` or `browser_tests/` are added, removed, renamed, or their expected behavior changes.
+
 Use pytest with the synchronous Playwright API and prefer user-visible role or label locators. The smoke test checks availability and does not count toward the three requested scenarios: a positive case, a negative case, and a discovered defect. For a defect test, assert the intended behavior and use `xfail(strict=True, reason="BUG-01: ...", raises=AssertionError)`; do not hide environment failures or fix the application as part of the QA assignment. No coverage threshold is configured. Reports and failure screenshots/traces are written to `artifacts/`.
 
 ## Commits & Pull Requests

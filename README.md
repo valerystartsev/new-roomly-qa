@@ -80,4 +80,5 @@ docker compose run --build --rm tests
 - [Specification and implementation checklist](docs/room-booking-specification.md) (Russian)
 - [Database structure](docs/database.md) (Russian)
 - [API documentation](docs/api.md) (Russian)
+- [Application test catalog](docs/application-tests.md)
 - [GitHub Flow](docs/github-flow.md)
