@@ -1,0 +1,6 @@
+body { font-family: sans-serif; background: #f4f3ee; color: #232621; margin: 0; }
+main { max-width: 650px; margin: 2rem auto; padding: 1.5rem; background: white; border-radius: 12px; }
+form { display: grid; gap: 1rem; margin-bottom: 2rem; }
+label { display: grid; gap: .35rem; }
+input, select, button { padding: .6rem; font: inherit; }
+button { cursor: pointer; }

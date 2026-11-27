@@ -112,3 +112,26 @@ For a local run with Java 21 and Maven, start `python -m http.server 8000` in an
 mvn -f java/pom.xml test-compile exec:java -Dexec.mainClass=com.microsoft.playwright.CLI -Dexec.args="install chromium" -Dexec.classpathScope=test
 mvn -f java/pom.xml test
 ```
+
+## Roomly application: initial development setup
+
+The client-server application is under development. The existing static QA exercise and its test commands remain separate. The first increment provides PostgreSQL reference data and account management; room booking is not implemented yet.
+
+Create a local environment file from `.env.example`, replace all placeholder values with unique local credentials, and keep the file out of version control. Use a URL-safe PostgreSQL password. Start the application with:
+
+```bash
+docker compose -f compose.app.yaml --env-file .env up --build -d --wait
+```
+
+Open `http://localhost:8001/account/` for account management and `http://localhost:8001/docs` for the OpenAPI UI. The local HTTP configuration disables secure cookies; use HTTPS and `COOKIE_SECURE=true` outside local development. Migrations and repeatable initial data are applied on startup. Initial administrator credentials are used only when there is no existing administrator; they do not reset an existing password.
+
+To run the integration tests against PostgreSQL in an isolated Compose project, use a separate test environment file with its own credentials, project name and `APP_PORT=8002` to avoid a port conflict. Do not run these tests against a production database:
+
+```bash
+docker compose -p roomly-test -f compose.app.yaml --env-file .env.test up --build -d --wait
+docker compose -p roomly-test -f compose.app.yaml --env-file .env.test exec app python -m pytest -q app_tests
+```
+
+For the browser test, start the application with test credentials, export `APP_URL`, `INITIAL_ADMIN_EMAIL` and `INITIAL_ADMIN_PASSWORD`, and run `python -m pytest -q browser_tests -o addopts=`, using the existing Playwright environment.
+
+The login rate limit is process-local and intended only for development. A shared rate limiter and a reverse proxy configured for HTTPS are required before production deployment. The initial migration currently covers accounts and reference data; booking and equipment repair schemas arrive with their features.

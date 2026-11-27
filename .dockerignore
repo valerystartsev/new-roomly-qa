@@ -8,3 +8,6 @@ artifacts-ts
 artifacts-java
 java/target
 *.zip
+.env
+.env.*
+!.env.example
